@@ -1,70 +1,27 @@
-# Getting Started with Create React App
+# ACAAN Double Stack App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React application that performs the classic mentalism effect **Any Card at Any Number (ACAAN)** using a special double-deck method. It utilizes Atomic deck stacked in special way.
+## 🔮 Features
 
-## Available Scripts
+- Input any playing card (e.g., `K♥️`, `7S`, `10♦️`)
+- Displays the valid position range for the selected card
+- Input any number between x-52 (I recommend numbers below 40 for obvious reasons)
+- The app calculates and displays dealing instructions:
+  - From which side to start
+  - Whether to flip the deck
+  - How many cards to deal before and after the flip
+- Fully mobile-friendly — "Done" key on mobile keyboard works like Enter
+- Emojis and card symbols display clearly and naturally
 
-In the project directory, you can run:
+## 🧠 Behind the Scenes
 
-### `npm start`
+The app uses two 52-card decks:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- `stack1` (odd cards from Atomic Deck):
+J♠️  5♠️  10♦️  K♠️  9♠️  7♠️  K♦️  8♥️  Q♦️  9♦️  J♥️  Q♠️  5♦️  
+3♠️  Q♣️  3♦️  10♣️  J♦️  2♠️  4♥️  8♦️  A♣️  2♦️  4♦️  7♥️  K♣️  
+7♦️  5♥️  5♣️  6♣️  A♥️  2♥️  10♠️  9♣️  8♣️  4♠️  2♣️  3♣️  8♠️  
+J♣️  10♥️  K♥️  A♠️  9♥️  6♦️  6♠️  7♣️  A♦️  4♣️  Q♥️  3♥️  6♥️  
+- `stack2`: reverse of `stack1` 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The trick works by dealing a specific number of cards from one side of the deck, optionally flipping it in the middle, so that the named card lands on the named position.
