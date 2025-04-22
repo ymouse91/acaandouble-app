@@ -1,0 +1,25 @@
+# Node.js riippuvuudet
+node_modules/
+
+# Vite build directory
+dist/
+
+# Ympäristömuuttujat
+.env
+.env.local
+.env.*.local
+
+# Logitiedostot
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editorien ja työkalujen asetukset
+.vscode/
+.idea/
+*.swp
+
+# Mac & Windows roskat
+.DS_Store
+Thumbs.db
