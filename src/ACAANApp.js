@@ -33,50 +33,76 @@ export default function ACAANApp() {
     return { pos1, pos2 };
   };
 
-  const getValidRange = (cardValue) => {
-    const { pos1, pos2 } = getCardPositions(cardValue);
-    if (pos1 === -1 || pos2 === -1) return null;
-    const minPos = Math.min(pos1 + 1, pos2 + 1);
-    const maxPos = 52;
-    return [minPos, maxPos];
-  };
+ const getValidRange = (cardValue) => {
+  const validPositions = [];
 
-  const getPreferredDealingInstructions = (cardValue, targetPos) => {
-    const { pos1, pos2 } = getCardPositions(cardValue);
-    if (pos1 === -1 || pos2 === -1) return null;
+  for (let pos = 1; pos <= 42; pos++) {
+    const instr = getPreferredDealingInstructions(cardValue, pos);
+    if (instr) {
+      validPositions.push(pos);
+    }
+  }
 
-    const options = [];
+  if (validPositions.length === 0) return null;
 
-    for (let dealFirst = 0; dealFirst <= targetPos; dealFirst++) {
-      const dealAfterFlip = targetPos - dealFirst;
-      if (dealFirst > 52 || dealAfterFlip > 52) continue;
+  return [Math.min(...validPositions), Math.max(...validPositions)];
+};
 
-      const side1_first = stack1[dealFirst - 1];
-      const side1_after = stack2[dealAfterFlip - 1];
-      if (dealAfterFlip === 0 && side1_first === cardValue) {
-        return { start: "Side 1", dealFirst, flip: false, dealAfterFlip: 0 };
-      }
-      if (side1_after === cardValue) {
-        options.push({ start: "Side 1", dealFirst, flip: true, dealAfterFlip });
-      }
 
-      const side2_first = stack2[dealFirst - 1];
-      const side2_after = stack1[dealAfterFlip - 1];
-      if (dealAfterFlip === 0 && side2_first === cardValue) {
-        return { start: "Side 2", dealFirst, flip: false, dealAfterFlip: 0 };
-      }
-      if (side2_after === cardValue) {
-        options.push({ start: "Side 2", dealFirst, flip: true, dealAfterFlip });
-      }
+
+ const getPreferredDealingInstructions = (cardValue, targetPos) => {
+  const { pos1, pos2 } = getCardPositions(cardValue);
+  if (pos1 === -1 || pos2 === -1) return null;
+  if (targetPos < 1 || targetPos > 42) return null; // uusi jakojen max-raja
+
+  const options = [];
+
+  for (let dealFirst = 0; dealFirst <= targetPos; dealFirst++) {
+    const dealAfterFlip = targetPos - dealFirst;
+    if (dealFirst > 52 || dealAfterFlip > 52) continue;
+
+    // stack1 → [flip] → stack2 (stack2: max 39)
+    if (dealFirst > 0 && stack1[dealFirst - 1] === cardValue && dealAfterFlip === 0) {
+      return { start: "Side 1", dealFirst, flip: false, dealAfterFlip: 0 };
+    }
+    if (
+      dealAfterFlip > 0 &&
+      dealAfterFlip <= 39 &&
+      stack2[dealAfterFlip - 1] === cardValue
+    ) {
+      options.push({ start: "Side 1", dealFirst, flip: true, dealAfterFlip });
     }
 
-    if (options.length > 0) {
-      const best = options.reduce((a, b) => a.dealFirst + a.dealAfterFlip < b.dealFirst + b.dealAfterFlip ? a : b);
-      return best;
+    // stack2 → [flip] → stack1 (stack2: max 39 ennen flippiä)
+    if (
+      dealFirst > 0 &&
+      dealFirst <= 39 &&
+      stack2[dealFirst - 1] === cardValue &&
+      dealAfterFlip === 0
+    ) {
+      return { start: "Side 2", dealFirst, flip: false, dealAfterFlip: 0 };
     }
+    if (
+      dealFirst > 0 &&
+      dealFirst <= 39 &&
+      dealAfterFlip > 0 &&
+      dealAfterFlip <= 52 &&
+      stack1[dealAfterFlip - 1] === cardValue
+    ) {
+      options.push({ start: "Side 2", dealFirst, flip: true, dealAfterFlip });
+    }
+  }
 
-    return null;
-  };
+  if (options.length > 0) {
+    const best = options.reduce((a, b) =>
+      a.dealFirst + a.dealAfterFlip < b.dealFirst + b.dealAfterFlip ? a : b
+    );
+    return best;
+  }
+
+  return null;
+};
+
 
   const handleCardInput = (e) => {
     const input = e.target.value;
@@ -191,32 +217,32 @@ export default function ACAANApp() {
             }}
           />
           <br />
-<input
-  id="position-input"
-  ref={positionInputRef}
-  value={position}
-  onChange={handlePositionInput}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter') handleSubmit();
-  }}
-  onBlur={() => {
-    if (card && position) handleSubmit();
-  }}
-  disabled={!card}
-  style={{
-    width: "80%",
-    padding: 4,
-    marginBottom: 8,
-    border: "none",
-    outline: "none",
-    background: "transparent",
-    fontSize: "1.5rem",
-    color: "inherit",
-    opacity: 1,
-    pointerEvents: card ? "auto" : "none",
-    userSelect: card ? "auto" : "none"
-  }}
-/>
+			<input
+			  id="position-input"
+			  ref={positionInputRef}
+			  value={position}
+			  onChange={handlePositionInput}
+			  onKeyDown={(e) => {
+				if (e.key === 'Enter') handleSubmit();
+			  }}
+			  onBlur={() => {
+				if (card && position) handleSubmit();
+			  }}
+			  disabled={!card}
+			  style={{
+				width: "80%",
+				padding: 4,
+				marginBottom: 8,
+				border: "none",
+				outline: "none",
+				background: "transparent",
+				fontSize: "1.5rem",
+				color: "inherit",
+				opacity: 1,
+				pointerEvents: card ? "auto" : "none",
+				userSelect: card ? "auto" : "none"
+			  }}
+			/>
           {rangeHint && !instructions && (
             <div style={{ fontSize: '1rem', color: 'gray' }}>
               {rangeHint[0]}–{rangeHint[1]}
